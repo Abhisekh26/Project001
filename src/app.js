@@ -3,6 +3,7 @@ const app = express()                   //creates an instances of expree js appl
 
 
 app.get("/user",(req,res)=>{
+    console.log(req.query)
     res.send({firstName:"abhisekh",lastName:"singh"})
 })
 app.post("/user",(req,res)=>{

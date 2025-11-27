@@ -1,9 +1,23 @@
 const express = require('express')
 const app = express()                   //creates an instances of expree js application 
-app.use((req,res)=>{
-    res.send("Hello from the server")
+
+
+app.get("/user",(req,res)=>{
+    res.send({firstName:"abhisekh",lastName:"singh"})
+})
+app.post("/user",(req,res)=>{
+    console.log("successfully posted")
+    res.send("user details posted")
 })
 
+app.delete("/user",(req,res)=>{
+    console.log("deleted successfully")
+    res.send("deleted")
+})
+
+app.use("/",(req,res)=>{
+    res.send("homepage")
+})
 app.listen(3000,()=>{
     console.log("server has started")
 })

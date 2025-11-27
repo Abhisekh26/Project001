@@ -7,7 +7,7 @@ app.get("/user",(req,res)=>{
 })
 app.post("/user",(req,res)=>{
     console.log("successfully posted")
-    res.send("user details posted")
+    res.send("user details posted again")
 })
 
 app.delete("/user",(req,res)=>{

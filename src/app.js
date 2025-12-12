@@ -25,52 +25,55 @@ app.post("/signup", async (req, res) => {
         res.send("user added ")
     }
     catch (err) {
-        res.status(400).send("something went wrong")
+        res.status(400).send(err)
     }
 })
 
-app.get("/user",async (req,res)=>{
+app.get("/user", async (req, res) => {
     const email = req.body.emailId
-    // console.log(email)
-    try{
-        const user = await users.findOne({emailId :email})
-        // console.log(user)
-       if(user){
-        res.send(user)
-       }
-       else{
-        res.send("no user")
-       }
+    try {
+        const user = await users.findOne({ emailId: email })
+        if (user) {
+            res.send(user)
+        }
+        else {
+            res.send("no user")
+        }
     }
-    catch(err){
+    catch (err) {
         res.status(400).send("something went wrong")
     }
 })
 
-app.delete("/user",async(req,res)=>{
+app.delete("/user", async (req, res) => {
     const id = req.body._id
-    try{
+    try {
         const user = await users.findByIdAndDelete(id)
-        if(user){
+        if (user) {
             res.send("user deleted")
         }
         else {
             res.send("no user exist ")
         }
     }
-    catch(err){
+    catch (err) {
         res.status(400).send("something went wrong")
     }
 })
 
-app.patch("/user",async(req,res)=>{
+   app.patch("/user", async (req, res) => {
     const email = req.body.emailId
-    try{
-        await users.findOneAndUpdate({emailId:email},req.body)
+    try {
+        const allowed = ["firstName", "lastName", "skills", "about"]
+        const isupdateAllowed = Object.keys(req.body).every((keys) => allowed.includes(keys))
+        if (!isupdateAllowed) {
+            throw Error("update not allowed")
+        }
+        await users.findOneAndUpdate({ emailId: email }, req.body, { runValidators: true, new: true })
         res.send("user updated")
     }
-    catch(err){
-
+    catch (err) {
+        res.status(400).send(err.message)
     }
 })
 

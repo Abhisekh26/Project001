@@ -1,6 +1,8 @@
 const express = require('express')
 const connectdb = require("./config/database")
 const users = require("./models/user")
+const bcrypt = require("bcrypt")
+const {signuphelper} = require("./utils/signuphelper")
 const app = express()
 app.use(express.json())
 //creates an instances of expree js application 
@@ -11,16 +13,13 @@ app.use(express.json())
 //     res.send("user 01 is logged")
 // })
 app.post("/signup", async (req, res) => {
-    // console.log(req.body)
-    // const userobj ={
-    //     firstName:"Rohit",
-    //     lastName:"Sharma",
-    //     emailId:"rohit@sharma.com",
-    //     password:'rohit@123'
-    // }
-    // creating anew instance of user model 
-    try {
-        const user = new users(req.body)
+     try {
+         signuphelper(req)
+         const{firstName,lastName,emailId,password} = req.body 
+         const passwordhash = await bcrypt.hash(password,10)
+        const user = new users({
+            firstName,lastName,emailId,password:passwordhash,
+        })
         await user.save()
         res.send("user added ")
     }
@@ -28,6 +27,30 @@ app.post("/signup", async (req, res) => {
         res.status(400).send(err)
     }
 })
+
+app.post("/login", async(req,res)=>{
+    try{
+      const {emailId,password }= req.body
+     const user = await users.findOne({emailId: emailId})
+     if(!user){
+        throw Error("Enter valid credentials")
+     }
+     else{
+        const checkPassword = await bcrypt.compare(password,user.password)
+        if(checkPassword){
+            res.send(user)
+        }
+        else{
+            res.send("enter valid credentials")
+        }
+     }
+    }
+    catch(err){
+        res.status(400).send("something went wrong")
+    }
+   
+})
+
 
 app.get("/user", async (req, res) => {
     const email = req.body.emailId

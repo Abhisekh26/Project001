@@ -6,7 +6,7 @@ const userSchema = new Schema({
     firstName: {
         type: String,
         required: true,
-        minLength: 4
+        minlength: 4
     },
     lastName: {
         type: String,
@@ -18,7 +18,7 @@ const userSchema = new Schema({
         trim: true,             // trims the user email id from both side 
         immutable:true,    //doesnt allow user to update email id
       validate: function (value){
-        if(!validator.isEmail('value')){
+        if(!validator.isEmail(value)){
             throw Error("enter valid email id ")
         }
       }           

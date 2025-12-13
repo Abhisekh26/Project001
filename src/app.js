@@ -2,6 +2,7 @@ const express = require('express')
 const connectdb = require("./config/database")
 const users = require("./models/user")
 const bcrypt = require("bcrypt")
+const {Authuser}= require("./middlewares/userauth")
 var cookieParser = require("cookie-parser")
 var jwt = require('jsonwebtoken');
 const {signuphelper} = require("./utils/signuphelper")
@@ -41,7 +42,8 @@ app.post("/login", async(req,res)=>{
      else{
         const checkPassword = await bcrypt.compare(password,user.password)
         if(checkPassword){
-            var secretToken =await jwt.sign({_id:user._id},"ABHI@JIMMY$2614")
+            // var secretToken =await jwt.sign({_id:user._id},"ABHI@JIMMY$2614")
+            var secretToken= await user.getJWT()
              res.cookie("token",secretToken)
             res.send(user)
         }
@@ -106,29 +108,16 @@ app.delete("/user", async (req, res) => {
 })
 
 
-app.get("/profile",async (req,res)=>{
+app.get("/profile",Authuser,async (req,res)=>{
     try{
-         const cookie = req.cookies
-    const{token} = cookie
-    const isTokenValid = await jwt.verify(token,"ABHI@JIMMY$2614")
-    if(!isTokenValid){
-        res.send("Something went wrong login again")
-    }
-    // console.log(isTokenValid)
-    const user = await users.findById(isTokenValid)
-    res.send(user)
+     const user = req.user
+        res.send(user)
     }
     catch(err){
         res.status(400).send("something went wrong")
     }
    
 })
-
-
-
-
-
-
 
 app.get("/feed", async (req, res) => {
 

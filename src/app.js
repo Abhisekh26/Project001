@@ -133,12 +133,6 @@ app.get("/feed", async (req, res) => {
 })
 
 
-
-
-
-
-
-
 connectdb().then(() => {
     console.log("connection established")
     app.listen(3000, () => {

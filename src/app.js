@@ -7,6 +7,7 @@ var cookieParser = require("cookie-parser")
 var jwt = require('jsonwebtoken');
 const authRouter = require("./routes/auth")
 const profileauth= require("./routes/profile")
+const connectionauth = require("./routes/connections")
 const {signuphelper} = require("./utils/signuphelper")
 const app = express()
 app.use(express.json())
@@ -68,6 +69,7 @@ app.use(cookieParser())
 
 app.use("/",authRouter)
 app.use("/",profileauth)
+app.use("/",connectionauth)
 
 // app.get("/user", async (req, res) => {
 //     const email = req.body.emailId

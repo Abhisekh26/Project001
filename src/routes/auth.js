@@ -5,6 +5,8 @@ const {signuphelper} = require("../utils/signuphelper")
 const bcrypt = require("bcrypt")
 const users = require("../models/user")
 const { JsonWebTokenError } = require("jsonwebtoken")
+
+
 authRouter.post("/signup",async (req,res)=>{
      try {
          signuphelper(req)
@@ -20,12 +22,6 @@ authRouter.post("/signup",async (req,res)=>{
         res.status(400).send(err)
     }
 })
-
-authRouter.post("/logout",async(req,res)=>{
-    res.cookie("token",null,{expires: new Date(Date.now())})
-    res.send("user logged out")
-})
-
 
 
 authRouter.post("/login",async (req,res)=>{
@@ -51,4 +47,13 @@ catch(err){
     err.status(400).send("enter valid credentials")
 }
 })
+
+
+authRouter.post("/logout",async(req,res)=>{
+    res.cookie("token",null,{expires: new Date(Date.now())})
+    res.send("user logged out")
+})
+
+
+
 module.exports=authRouter

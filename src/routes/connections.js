@@ -70,13 +70,12 @@ connectionauth.get("/request/review/:status/:request_id",Authuser,async(req,res)
         if(!requestExists){
             return res.send("oops no such request should exist")
         }
-        const data = await connectionrequest.findOne({_id:senderId,toUserid:req.user_id})
+        const data = await connectionrequest.findOne({_id:senderId,toUserid:req.user._id})
+         console.log(data)
         data.status= "accepted"
-        await connectionrequest.save()
-        console.log(data)
-        res.send(data
-
-        )
+        await data.save()
+       
+        res.send(data)
     }catch(err){
         res.status(400).send("something went wrong")
     }

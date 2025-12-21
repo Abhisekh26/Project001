@@ -8,7 +8,9 @@ var jwt = require('jsonwebtoken');
 const authRouter = require("./routes/auth")
 const profileauth= require("./routes/profile")
 const connectionauth = require("./routes/connections")
+const userRouter = require("./routes/user")
 const {signuphelper} = require("./utils/signuphelper")
+
 const app = express()
 app.use(express.json())
 app.use(cookieParser())
@@ -70,6 +72,7 @@ app.use(cookieParser())
 app.use("/",authRouter)
 app.use("/",profileauth)
 app.use("/",connectionauth)
+app.use("/",userRouter)
 
 // app.get("/user", async (req, res) => {
 //     const email = req.body.emailId
@@ -131,18 +134,18 @@ app.use("/",connectionauth)
    
 // })
 
-app.get("/feed", async (req, res) => {
+// app.get("/feed", async (req, res) => {
 
-    try {
-        const user = await users.find({})
-        res.send(user)
-    }
-    catch (err) {
-        res.status(400).send("something went wrong")
+//     try {
+//         const user = await users.find({})
+//         res.send(user)
+//     }
+//     catch (err) {
+//         res.status(400).send("something went wrong")
 
-    }
+//     }
 
-})
+// })
 
 
 connectdb().then(() => {

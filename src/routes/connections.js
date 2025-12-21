@@ -4,6 +4,8 @@ const { Authuser } = require("../middlewares/userauth")
 const express = require("express")
 const connectionauth = express.Router()
 
+//api to send friend request
+
 connectionauth.post("/request/send/:status/:touser_id", Authuser, async (req, res) => {
     try {
         const fromUser = req.user._id
@@ -54,6 +56,30 @@ connectionauth.post("/request/send/:status/:touser_id", Authuser, async (req, re
         res.status(400).send("something went wrong ")
     }
 
+})
+
+// api to recieve  friend request 
+
+connectionauth.get("/request/review/:status/:request_id",Authuser,async(req,res)=>{
+    try{
+        const user = req.user
+        const status=req.params.status
+        const senderId = req.params.request_id
+       
+        const requestExists = await connectionrequest.findById(senderId)
+        if(!requestExists){
+            return res.send("oops no such request should exist")
+        }
+        const data = await connectionrequest.findOne({_id:senderId,toUserid:req.user_id})
+        data.status= "accepted"
+        await connectionrequest.save()
+        console.log(data)
+        res.send(data
+
+        )
+    }catch(err){
+        res.status(400).send("something went wrong")
+    }
 })
 
 module.exports = connectionauth

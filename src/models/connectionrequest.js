@@ -21,4 +21,6 @@ const connectionrequestschema = new mongoose.Schema({
     timestamps:true
 })
 
+connectionrequestschema.index({fromuserid:1, toUserid:1})
+
 module.exports = mongoose.model("ConnectionRequest",connectionrequestschema)

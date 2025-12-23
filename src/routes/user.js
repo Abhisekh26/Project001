@@ -46,12 +46,8 @@ const friends = userdata.map(conn => {
 })
 res.send(friends)
 console.log(friends)
-
-
     }
-
-
-    catch(Err){
+ catch(Err){
         res.status(400).send("something went wrong")
     }
 })
